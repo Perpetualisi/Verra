@@ -5,32 +5,32 @@ const slides = [
   {
     image: "/verra11.jpg",
     heading: "Verra",
-    text: "Where Fragrance Meets Art",
-    button: "Shop Now",
+    text: "Art in Scent",
+    button: "Shop",
   },
   {
     image: "/verra2.jpg",
-    heading: "Unleash the Power of Scent",
-    text: "Luxury perfumes crafted for elegance",
-    button: "Discover Collection",
+    heading: "Pure Scent",
+    text: "Luxury Drops",
+    button: "See",
   },
   {
     image: "/verra3.jpg",
-    heading: "Fragrance, Redefined",
-    text: "Every bottle tells your story",
-    button: "Explore Now",
+    heading: "New Scent",
+    text: "Your Story",
+    button: "Try",
   },
   {
     image: "/verra4.jpg",
-    heading: "Timeless Beauty",
-    text: "Inspired by nature, perfected by Verra",
-    button: "Get Yours",
+    heading: "Beauty",
+    text: "Nature's Touch",
+    button: "Buy",
   },
   {
     image: "/verra5.jpg",
-    heading: "Bold. Elegant. You.",
-    text: "Let your scent speak louder",
-    button: "View Notes",
+    heading: "Be Bold",
+    text: "Speak Scent",
+    button: "View",
   },
 ];
 
@@ -55,9 +55,7 @@ const Hero = () => {
   return (
     <section className="hero" id="home">
       <div className="hero-wrapper">
-        <div className="arrow left-arrow" onClick={prevSlide}>
-          ‹
-        </div>
+        <div className="arrow left-arrow" onClick={prevSlide}>‹</div>
 
         <div className="hero-text">
           <h1 className="brand-name gradient-text">
@@ -77,9 +75,7 @@ const Hero = () => {
           />
         </div>
 
-        <div className="arrow right-arrow" onClick={nextSlide}>
-          ›
-        </div>
+        <div className="arrow right-arrow" onClick={nextSlide}>›</div>
       </div>
 
       <div className="scroll-indicator" onClick={scrollToNext}></div>
