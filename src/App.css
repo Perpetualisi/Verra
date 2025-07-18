@@ -8,10 +8,17 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 100px; 
 }
+html, body {
+  height: 100%;
+  background: linear-gradient(135deg, #fef9f6, #f6ebe4);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
 
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: #fdf9f6;
+  background: linear-gradient(135deg, #fef9f6, #f6ebe4);
   color: #2c2c2c;
   line-height: 1.6;
   overflow-x: hidden;

@@ -1,50 +1,84 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./Hero.css";
 
-const images = [
-  "/verra11.jpg",
-  "/verra2.jpg",
-  "/verra3.jpg",
-  "/verra4.jpg",
-  "/verra5.jpg",
+const slides = [
+  {
+    image: "/verra11.jpg",
+    heading: "Verra",
+    text: "Where Fragrance Meets Art",
+    button: "Shop Now",
+  },
+  {
+    image: "/verra2.jpg",
+    heading: "Unleash the Power of Scent",
+    text: "Luxury perfumes crafted for elegance",
+    button: "Discover Collection",
+  },
+  {
+    image: "/verra3.jpg",
+    heading: "Fragrance, Redefined",
+    text: "Every bottle tells your story",
+    button: "Explore Now",
+  },
+  {
+    image: "/verra4.jpg",
+    heading: "Timeless Beauty",
+    text: "Inspired by nature, perfected by Verra",
+    button: "Get Yours",
+  },
+  {
+    image: "/verra5.jpg",
+    heading: "Bold. Elegant. You.",
+    text: "Let your scent speak louder",
+    button: "View Notes",
+  },
 ];
 
 const Hero = () => {
-  const [currentImage, setCurrentImage] = useState(0);
+  const [current, setCurrent] = useState(0);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % images.length);
-    }, 2500);
-    return () => clearInterval(interval);
-  }, []);
+  const nextSlide = () => {
+    setCurrent((prev) => (prev + 1) % slides.length);
+  };
+
+  const prevSlide = () => {
+    setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
+  };
 
   const scrollToNext = () => {
-    const contactSection = document.querySelector("#collection");
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: "smooth" });
+    const collectionSection = document.querySelector("#collection");
+    if (collectionSection) {
+      collectionSection.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   return (
     <section className="hero" id="home">
-      <div className="particles"></div>
-
       <div className="hero-wrapper">
+        <div className="arrow left-arrow" onClick={prevSlide}>
+          ‹
+        </div>
+
         <div className="hero-text">
-          <h1 className="brand-name">Verra</h1>
-          <p className="tagline">Where Fragrance Meets Art</p>
+          <h1 className="brand-name gradient-text">
+            {slides[current].heading}
+          </h1>
+          <p className="tagline">{slides[current].text}</p>
           <button className="cta-button" onClick={scrollToNext}>
-            Shop Now
+            {slides[current].button}
           </button>
         </div>
 
         <div className="hero-image-wrapper">
           <img
-            src={images[currentImage]}
+            src={slides[current].image}
             alt="Verra Perfume"
             className="hero-image fade-image"
           />
+        </div>
+
+        <div className="arrow right-arrow" onClick={nextSlide}>
+          ›
         </div>
       </div>
 
