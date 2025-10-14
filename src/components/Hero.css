@@ -1,10 +1,11 @@
 .hero {
   position: relative;
-  height: 90vh;
+  height: 85vh;
   width: 100%;
   background: linear-gradient(135deg, #fef9f6, #f6ebe4);
   overflow: hidden;
-  padding: 2rem;
+  padding-top: 200px; 
+  padding: 200px 2rem 2rem 2rem; /* top, right, bottom, left */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12,7 +13,6 @@
 
 .particles::before,
 .particles::after {
-  content: '';
   position: absolute;
   width: 300px;
   height: 300px;
