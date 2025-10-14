@@ -277,7 +277,8 @@
     font-size: 1.5rem;
   }
 .hero{
-  height: 85vh;
+  height: 80vh;
+  padding: 100px 1rem 1rem 1rem; 
 }
   .hero-text {
     font-size: 1rem;
