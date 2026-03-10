@@ -1,0 +1,33 @@
+/* ─────────────────────────────────────────────────────
+   GLOBAL RESET
+   
+   CRITICAL: Do NOT use overflow-x: hidden on html or body.
+   When set on these two elements, browsers transfer the
+   overflow to the viewport scroll container, which clips
+   ALL position:fixed elements (including the navbar/hamburger)
+   on the right edge of narrow mobile screens.
+   
+   overflow-x: clip achieves the same visual result (no
+   horizontal scrollbar) WITHOUT being transferred to the
+   viewport, so fixed elements render correctly.
+───────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  overflow-x: visible;  /* Fixed: prevent clipping of fixed elements on mobile */
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: visible;  /* Fixed: prevent clipping of fixed elements on mobile */
+  min-height: 100svh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

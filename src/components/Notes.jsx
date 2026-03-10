@@ -1,5 +1,4 @@
 import React from "react";
-import "./Notes.css";
 
 const notesData = [
   {
@@ -24,17 +23,17 @@ const notesData = [
 
 const Notes = () => {
   return (
-    <section className="notes-section" id="notes">
-      <h2 className="notes-title">Fragrance Notes</h2>
-      <div className="notes-grid">
+    <section className="bg-gradient-to-br from-[#fef9f6] to-[#f6ebe4] py-20 px-8 text-center" id="notes">
+      <h2 className="font-serif text-2xl sm:text-4xl text-gray-800 mb-12">Fragrance Notes</h2>
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-8">
         {notesData.map((note, index) => (
-          <div className="note-card" key={index}>
-            <div className="note-icon">{note.icon}</div>
-            <h3>{note.title}</h3>
-            <p className="note-desc">{note.description}</p>
-            <ul className="note-list">
+          <div className="bg-white rounded-xl p-8 shadow-lg" key={index}>
+            <div className="text-4xl mb-4">{note.icon}</div>
+            <h3 className="font-serif text-lg sm:text-xl text-gray-700 mb-2">{note.title}</h3>
+            <p className="text-sm text-gray-600 mb-4 leading-relaxed">{note.description}</p>
+            <ul className="list-none p-0 text-sm text-gray-700">
               {note.ingredients.map((item, idx) => (
-                <li key={idx}>{item}</li>
+                <li className="my-1" key={idx}>{item}</li>
               ))}
             </ul>
           </div>

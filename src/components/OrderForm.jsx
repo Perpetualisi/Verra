@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import perfumes from "../data/perfumes";
-import "./OrderForm.css";
 
 const OrderForm = () => {
   const [form, setForm] = useState({
@@ -36,9 +35,9 @@ const OrderForm = () => {
   };
 
   return (
-    <section className="order-form-section" id="contact">
-      <form className="order-form" onSubmit={handleSubmit}>
-        <h2>Order Your Fragrance</h2>
+    <section className="bg-white/30 backdrop-blur-[12px] py-8 md:py-12 px-4 md:px-6 rounded-3xl max-w-[600px] mx-auto shadow-lg" id="contact">
+      <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+        <h2 className="font-serif text-gray-800 text-lg md:text-xl text-center mb-4">Order Your Fragrance</h2>
 
         <input
           type="text"
@@ -47,6 +46,7 @@ const OrderForm = () => {
           required
           value={form.name}
           onChange={handleChange}
+          className="px-4 py-3 rounded-xl border-none bg-[#fffdfb] text-base shadow-inner"
         />
 
         <input
@@ -56,9 +56,10 @@ const OrderForm = () => {
           required
           value={form.email}
           onChange={handleChange}
+          className="px-4 py-3 rounded-xl border-none bg-[#fffdfb] text-base shadow-inner"
         />
 
-        <select name="productId" value={form.productId} onChange={handleChange}>
+        <select name="productId" value={form.productId} onChange={handleChange} className="px-4 py-3 rounded-xl border-none bg-[#fffdfb] text-base shadow-inner">
           {perfumes.map((p) => (
             <option key={p.id} value={p.id}>
               {p.name}
@@ -72,6 +73,7 @@ const OrderForm = () => {
           min="1"
           value={form.quantity}
           onChange={handleChange}
+          className="px-4 py-3 rounded-xl border-none bg-[#fffdfb] text-base shadow-inner"
         />
 
         <textarea
@@ -80,20 +82,21 @@ const OrderForm = () => {
           rows="4"
           value={form.message}
           onChange={handleChange}
+          className="px-4 py-3 rounded-xl border-none bg-[#fffdfb] text-base shadow-inner"
         />
 
-        <p className="total-price">Total: ${total.toLocaleString()}</p>
+        <p className="font-bold text-gray-800 text-center text-lg mt-2">Total: ${total.toLocaleString()}</p>
 
-        <button type="submit">Place Order via WhatsApp</button>
+        <button type="submit" className="px-4 py-3 text-base bg-gradient-to-r from-[#d4af37] to-[#f3e5ab] text-white border-none rounded-full cursor-pointer transition-transform duration-300 hover:scale-105">Place Order via WhatsApp</button>
       </form>
 
-<div className="contact-details">
-  <h3>Need Assistance?</h3>
-  <p>📞 Phone: +1 (212) 555-9876</p>
-  <p>📧 Email: support@verraperfume.com</p>
-  <p>📍 Location: New York, NY, USA</p>
-  <p>⏰ Hours: Mon – Sat, 10AM – 7PM EST</p>
-</div>
+      <div className="mt-12 pt-8 border-t border-gray-200 text-center text-sm text-gray-800 leading-relaxed">
+        <h3 className="font-serif mb-4 text-black">Need Assistance?</h3>
+        <p>📞 Phone: +1 (212) 555-9876</p>
+        <p>📧 Email: support@verraperfume.com</p>
+        <p>📍 Location: New York, NY, USA</p>
+        <p>⏰ Hours: Mon – Sat, 10AM – 7PM EST</p>
+      </div>
     </section>
   );
 };
