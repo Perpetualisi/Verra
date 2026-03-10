@@ -14,6 +14,12 @@ const SLIDES = [
     cta:"Shop Now", badge:"Bestseller",
     accent:"#c9a84c", liquid:"#b05c10", cap:"#f0d080", bg1:"#fef9f0", bg2:"#f8e8c0",
     note:"Bergamot · Oud · Amber", family:"Oriental Woody", origin:"New York", year:"2019",
+    price:"$185", ml:"50 ML",
+    topNotes:["Bergamot","Cardamom","Saffron"],
+    heartNotes:["Oud","Rose","Jasmine"],
+    baseNotes:["Amber","Sandalwood","Musk"],
+    intensity: 88,
+    longevity: 12,
   },
   {
     id:1, name:"PURE SCENT", heading:"Luxury Drops", tagline:"Softness distilled to perfection",
@@ -21,6 +27,12 @@ const SLIDES = [
     cta:"Discover", badge:"New Arrival",
     accent:"#b8896a", liquid:"#7a3b1e", cap:"#e8c4a0", bg1:"#fdf5ee", bg2:"#f0d8c0",
     note:"Rose · Musk · Sandalwood", family:"Floral Woody", origin:"Los Angeles", year:"2021",
+    price:"$165", ml:"75 ML",
+    topNotes:["Bergamot","Lychee","Peach"],
+    heartNotes:["Rose","Iris","Violet"],
+    baseNotes:["Sandalwood","Musk","Vanilla"],
+    intensity: 62,
+    longevity: 10,
   },
   {
     id:2, name:"NEW SCENT", heading:"Your Story", tagline:"Earth. Rain. Renewal.",
@@ -28,6 +40,12 @@ const SLIDES = [
     cta:"Explore", badge:"Limited Edition",
     accent:"#5a8a6a", liquid:"#1e3a28", cap:"#a0c8a8", bg1:"#f0f8f2", bg2:"#c8e0cc",
     note:"Vetiver · Cedar · Fern", family:"Aromatic Green", origin:"Portland", year:"2023",
+    price:"$195", ml:"30 ML",
+    topNotes:["Green Tea","Fern","Bergamot"],
+    heartNotes:["Vetiver","Cedar","Violet"],
+    baseNotes:["Oakmoss","Amber","Musk"],
+    intensity: 74,
+    longevity: 14,
   },
   {
     id:3, name:"BEAUTY", heading:"Nature's Touch", tagline:"Clarity in every note",
@@ -35,20 +53,31 @@ const SLIDES = [
     cta:"Buy Now", badge:"Award Winner",
     accent:"#5888b0", liquid:"#0e2848", cap:"#88b8d8", bg1:"#f0f4fc", bg2:"#c0d4e8",
     note:"Iris · Violet · Aqua", family:"Floral Aquatic", origin:"Chicago", year:"2020",
+    price:"$210", ml:"100 ML",
+    topNotes:["Sea Spray","Citrus","Aldehydes"],
+    heartNotes:["Iris","Violet","Aqua"],
+    baseNotes:["White Musk","Driftwood","Ambergris"],
+    intensity: 55,
+    longevity: 9,
   },
   {
     id:4, name:"BE BOLD", heading:"Speak Scent", tagline:"Unapologetic. Unmistakable.",
     sub:"Jasmine Sambac from India, dark Patchouli aged in oak, and scorching Spice accord — a scent that commands every room it enters.",
-    cta:"View All", badge:"Fan Favorite",
+    cta:"Order Now", badge:"Fan Favorite",
     accent:"#a85878", liquid:"#580828", cap:"#e0a0c0", bg1:"#fdf0f4", bg2:"#ecc8d4",
     note:"Jasmine · Patchouli · Spice", family:"Floral Oriental", origin:"Miami", year:"2022",
+    price:"$175", ml:"60 ML",
+    topNotes:["Jasmine","Pink Pepper","Plum"],
+    heartNotes:["Patchouli","Rose","Cinnamon"],
+    baseNotes:["Oud","Vanilla","Benzoin"],
+    intensity: 95,
+    longevity: 16,
   },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
    SVG BOTTLES
 ═══════════════════════════════════════════════════════════════════ */
-
 function Bottle1({ slide, mx, my }) {
   const { accent:A, liquid:L, cap:C } = slide;
   const rx = useTransform(my, [-1,1], [7,-7]);
@@ -446,7 +475,271 @@ function Particles({ accent }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   CSS — complete responsive system
+   ✦ UNIQUE PREMIUM FEATURE — SCENT DNA VISUALIZER
+   An interactive radial web that maps the fragrance pyramid in real-
+   time. Top / Heart / Base notes bloom as animated SVG petals.
+   Tapping a note zooms + highlights it and shows a tooltip.
+═══════════════════════════════════════════════════════════════════ */
+function ScentDNA({ slide }) {
+  const [active, setActive] = useState(null);
+  const cx = 110, cy = 110, R = 88;
+
+  const layers = [
+    { tier:"Top",   notes: slide.topNotes,   r: R*.42,  opacity:.72, labelR: R*.55 },
+    { tier:"Heart", notes: slide.heartNotes, r: R*.68,  opacity:.60, labelR: R*.79 },
+    { tier:"Base",  notes: slide.baseNotes,  r: R,      opacity:.46, labelR: R*1.06 },
+  ];
+
+  // Build petal paths for each note across all tiers
+  const allNotes = [];
+  layers.forEach(layer => {
+    const count = layer.notes.length;
+    layer.notes.forEach((note, i) => {
+      const angle = (i / count) * 2 * Math.PI - Math.PI / 2 + (layers.indexOf(layer) * 0.18);
+      const x = cx + layer.r * Math.cos(angle);
+      const y = cy + layer.r * Math.sin(angle);
+      const lx = cx + layer.labelR * Math.cos(angle);
+      const ly = cy + layer.labelR * Math.sin(angle);
+      allNotes.push({ note, x, y, lx, ly, tier: layer.tier, opacity: layer.opacity, angle });
+    });
+  });
+
+  // Polygon web points (all notes)
+  const webPoints = allNotes.map(n=>`${n.x},${n.y}`).join(" ");
+
+  return (
+    <div style={{position:"relative",width:"100%"}}>
+      {/* Title */}
+      <div style={{
+        fontFamily:"'Cinzel',serif",fontSize:".4rem",letterSpacing:".46em",
+        textTransform:"uppercase",color:`${slide.accent}88`,
+        textAlign:"center",marginBottom:6,
+      }}>Scent DNA · {slide.family}</div>
+
+      <svg viewBox="0 0 220 220" width="100%" style={{overflow:"visible"}}>
+        <defs>
+          <radialGradient id="dna-glow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"  stopColor={slide.accent} stopOpacity=".22"/>
+            <stop offset="100%" stopColor={slide.accent} stopOpacity="0"/>
+          </radialGradient>
+        </defs>
+
+        {/* Ambient glow */}
+        <circle cx={cx} cy={cy} r={R+12} fill="url(#dna-glow)"/>
+
+        {/* Concentric guide rings */}
+        {layers.map((l,i)=>(
+          <circle key={i} cx={cx} cy={cy} r={l.r}
+            fill="none" stroke={`${slide.accent}${i===0?"28":"16"}`}
+            strokeWidth={i===0?".6":".4"} strokeDasharray={i===2?"none":"3 4"}/>
+        ))}
+        {/* Center dot */}
+        <motion.circle cx={cx} cy={cy} r="3.5" fill={slide.accent}
+          animate={{scale:[1,1.4,1],opacity:[.7,1,.7]}}
+          transition={{duration:3,repeat:Infinity,ease:"easeInOut"}}/>
+
+        {/* Web polygon */}
+        <motion.polygon points={webPoints}
+          fill={`${slide.accent}0c`} stroke={`${slide.accent}28`} strokeWidth=".6"
+          initial={{opacity:0,scale:.85}} animate={{opacity:1,scale:1}}
+          transition={{duration:.8,ease:[.16,1,.3,1]}}
+          style={{transformOrigin:`${cx}px ${cy}px`}}/>
+
+        {/* Spokes from center to each note */}
+        {allNotes.map((n,i)=>(
+          <motion.line key={`spoke-${i}`}
+            x1={cx} y1={cy} x2={n.x} y2={n.y}
+            stroke={`${slide.accent}22`} strokeWidth=".5"
+            initial={{pathLength:0}} animate={{pathLength:1}}
+            transition={{delay:i*.04,duration:.6}}/>
+        ))}
+
+        {/* Note dots */}
+        {allNotes.map((n,i)=>{
+          const isActive = active === n.note;
+          return (
+            <motion.g key={`note-${i}`}
+              style={{cursor:"pointer"}}
+              onClick={()=>setActive(isActive ? null : n.note)}>
+              {/* Outer ring on hover */}
+              <motion.circle cx={n.x} cy={n.y} r={isActive ? 11 : 7}
+                fill={`${slide.accent}${isActive?"28":"14"}`}
+                stroke={slide.accent}
+                strokeWidth={isActive ? "1" : ".5"}
+                strokeOpacity={isActive ? 1 : n.opacity}
+                animate={{r: isActive ? 11 : 7, fillOpacity: isActive ? 1 : n.opacity}}
+                transition={{duration:.28}}/>
+              {/* Inner fill */}
+              <motion.circle cx={n.x} cy={n.y} r={isActive ? 5 : 3}
+                fill={slide.accent}
+                animate={{r: isActive ? 5 : 3, opacity: isActive ? 1 : n.opacity}}
+                transition={{duration:.28}}/>
+              {/* Label */}
+              <motion.text
+                x={n.lx} y={n.ly}
+                textAnchor="middle" dominantBaseline="middle"
+                fill={slide.accent}
+                style={{fontFamily:"'Cormorant Garamond',serif",fontWeight:isActive?700:400}}
+                animate={{fontSize: isActive ? "7px" : "5.5px", opacity: isActive ? 1 : n.opacity + .12}}
+                transition={{duration:.22}}>
+                {n.note}
+              </motion.text>
+            </motion.g>
+          );
+        })}
+
+        {/* Tier labels on left */}
+        {layers.map((l,i)=>(
+          <text key={`tier-${i}`} x={cx - l.r - 4} y={cy}
+            textAnchor="end" dominantBaseline="middle"
+            fill={`${slide.accent}55`}
+            style={{fontFamily:"'Cinzel',serif",fontSize:"4.5px",letterSpacing:"1.5px"}}>
+            {l.tier.toUpperCase()}
+          </text>
+        ))}
+      </svg>
+
+      {/* Active note tooltip */}
+      <AnimatePresence>
+        {active && (
+          <motion.div
+            initial={{opacity:0,y:4}} animate={{opacity:1,y:0}} exit={{opacity:0,y:4}}
+            transition={{duration:.2}}
+            style={{
+              textAlign:"center",marginTop:2,
+              fontFamily:"'Cormorant Garamond',serif",
+              fontSize:".78rem",fontStyle:"italic",
+              color:`${slide.accent}cc`,letterSpacing:".06em",
+            }}>
+            {active} · {allNotes.find(n=>n.note===active)?.tier} note
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   ORDER MODAL
+═══════════════════════════════════════════════════════════════════ */
+function OrderModal({ slide, onClose }) {
+  const [qty, setQty] = useState(1);
+  const [added, setAdded] = useState(false);
+
+  const handleOrder = () => {
+    setAdded(true);
+    setTimeout(() => { setAdded(false); onClose(); }, 1600);
+  };
+
+  return (
+    <motion.div
+      initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}
+      style={{
+        position:"fixed",inset:0,zIndex:10000,
+        display:"flex",alignItems:"center",justifyContent:"center",
+        background:"rgba(10,4,0,.55)",backdropFilter:"blur(12px)",
+        padding:"20px",
+      }}
+      onClick={onClose}>
+      <motion.div
+        initial={{opacity:0,y:32,scale:.96}}
+        animate={{opacity:1,y:0,scale:1}}
+        exit={{opacity:0,y:20,scale:.96}}
+        transition={{duration:.44,ease:[.16,1,.3,1]}}
+        onClick={e=>e.stopPropagation()}
+        style={{
+          background:"#fdf8f0",borderRadius:4,
+          padding:"40px 36px",width:"100%",maxWidth:440,
+          border:`1px solid ${slide.accent}28`,
+          boxShadow:`0 32px 80px rgba(0,0,0,.22),0 0 0 1px ${slide.accent}14`,
+          position:"relative",
+        }}>
+        {/* Close */}
+        <button onClick={onClose} style={{
+          position:"absolute",top:16,right:18,background:"none",border:"none",
+          cursor:"pointer",fontSize:"1.2rem",color:`${slide.accent}80`,
+          fontFamily:"'Cinzel',serif",lineHeight:1,
+        }}>✕</button>
+
+        {/* Gold stripe */}
+        <div style={{height:2,background:`linear-gradient(to right,${slide.cap},${slide.accent},${slide.liquid})`,marginBottom:28,marginLeft:-36,marginRight:-36,marginTop:-40,borderRadius:"4px 4px 0 0"}}/>
+
+        <div style={{fontFamily:"'Cinzel',serif",fontSize:".42rem",letterSpacing:".48em",color:`${slide.accent}80`,marginBottom:6}}>MAISON VERRA</div>
+        <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.9rem",fontWeight:600,letterSpacing:".02em",color:"#180809",marginBottom:4}}>{slide.name}</div>
+        <div style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",fontSize:".88rem",color:`${slide.accent}aa`,letterSpacing:".04em",marginBottom:24}}>{slide.note}</div>
+
+        {/* Size + qty */}
+        <div style={{display:"flex",gap:12,marginBottom:22,flexWrap:"wrap"}}>
+          {["30 ML","50 ML","100 ML"].map(sz=>(
+            <button key={sz}
+              style={{
+                flex:1,minWidth:70,padding:"10px 0",
+                fontFamily:"'Cinzel',serif",fontSize:".42rem",letterSpacing:".28em",
+                border:`1px solid ${sz===slide.ml?slide.accent:slide.accent+"38"}`,
+                background:sz===slide.ml?`${slide.accent}14`:"transparent",
+                color:sz===slide.ml?slide.accent:`${slide.accent}70`,
+                cursor:"pointer",borderRadius:2,transition:"all .22s",
+              }}>
+              {sz}
+            </button>
+          ))}
+        </div>
+
+        {/* Qty */}
+        <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:28}}>
+          <span style={{fontFamily:"'Cinzel',serif",fontSize:".42rem",letterSpacing:".3em",color:`${slide.accent}80`}}>QTY</span>
+          <div style={{display:"flex",alignItems:"center",gap:0,border:`1px solid ${slide.accent}38`,borderRadius:2,overflow:"hidden"}}>
+            {["-","+"].map((btn,i)=>(
+              <button key={btn} onClick={()=>setQty(q=>btn==="-"?Math.max(1,q-1):q+1)}
+                style={{
+                  width:36,height:36,border:"none",background:"transparent",
+                  cursor:"pointer",fontSize:"1rem",color:slide.accent,
+                  borderRight:i===0?`1px solid ${slide.accent}28`:"none",
+                  fontFamily:"'Cinzel',serif",transition:"background .18s",
+                }}
+                onMouseEnter={e=>e.currentTarget.style.background=`${slide.accent}14`}
+                onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+                {btn}
+              </button>
+            ))}
+            <span style={{width:42,textAlign:"center",fontFamily:"'Cormorant Garamond',serif",fontSize:"1.1rem",color:"#180809"}}>{qty}</span>
+          </div>
+          <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.2rem",fontWeight:600,color:slide.accent,marginLeft:"auto"}}>{slide.price}</span>
+        </div>
+
+        {/* Order CTA */}
+        <motion.button
+          onClick={handleOrder} whileTap={{scale:.97}}
+          style={{
+            width:"100%",padding:"15px 0",border:"none",cursor:"pointer",
+            background:`linear-gradient(128deg,${slide.cap} 0%,${slide.accent} 48%,${slide.liquid} 100%)`,
+            color:"#17080a",fontFamily:"'Cinzel',serif",fontSize:".52rem",
+            letterSpacing:".38em",textTransform:"uppercase",borderRadius:2,
+            boxShadow:`0 8px 32px ${slide.accent}38`,transition:"opacity .2s",
+          }}>
+          <AnimatePresence mode="wait">
+            {added
+              ? <motion.span key="done" initial={{opacity:0}} animate={{opacity:1}}>✓ Added to Cart</motion.span>
+              : <motion.span key="order" initial={{opacity:0}} animate={{opacity:1}}>Place Order · {slide.price}</motion.span>
+            }
+          </AnimatePresence>
+        </motion.button>
+
+        {/* Trust badges */}
+        <div style={{display:"flex",justifyContent:"center",gap:20,marginTop:18,flexWrap:"wrap"}}>
+          {["Free Shipping","Gift Wrapping","30-Day Return"].map(t=>(
+            <span key={t} style={{fontFamily:"'Cinzel',serif",fontSize:".35rem",letterSpacing:".28em",color:`${slide.accent}60`,textTransform:"uppercase"}}>
+              ✦ {t}
+            </span>
+          ))}
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   CSS
 ═══════════════════════════════════════════════════════════════════ */
 const CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=Jost:wght@200;300;400;500&family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap');
@@ -501,6 +794,19 @@ const CSS = `
              box-shadow .38s cubic-bezier(.16,1,.3,1);
 }
 .mv-nav:hover{transform:translateY(-3px) scale(1.07);}
+
+/* ── DNA panel ── */
+.mv-dna{
+  margin-top:24px;
+  width:100%;max-width:340px;
+  background:rgba(255,255,255,.42);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-radius:3px;
+  padding:14px 16px 10px;
+  border:1px solid rgba(0,0,0,.06);
+  box-shadow:0 4px 24px rgba(0,0,0,.04),inset 0 1px 0 rgba(255,255,255,.6);
+}
 
 /* ── Type ── */
 .mv-h1{
@@ -603,6 +909,12 @@ const CSS = `
   font-size:.88rem;font-weight:600;letter-spacing:.03em;
 }
 
+/* ── Price badge ── */
+.mv-price{
+  display:inline-flex;align-items:baseline;gap:6px;
+  margin-bottom:38px;
+}
+
 /* ── Scent pill ── */
 .mv-scent{
   padding:10px 22px;border-radius:3px;text-align:center;
@@ -678,6 +990,7 @@ const CSS = `
   .mv-outer{padding:116px 40px 48px;gap:0 28px;}
   .mv-stage{width:288px;height:470px;}
   .mv-side,.mv-stamp{display:none;}
+  .mv-dna{max-width:288px;}
 }
 
 /* ══ LANDSCAPE SHORT  ≤ 900px landscape ══ */
@@ -690,6 +1003,7 @@ const CSS = `
   .mv-h1{font-size:clamp(2.4rem,7vw,3.4rem);}
   .mv-desc{display:none;}
   .mv-scroll,.mv-side{display:none;}
+  .mv-dna{display:none;}
 }
 
 /* ══ MOBILE  ≤ 768px ══ */
@@ -714,9 +1028,10 @@ const CSS = `
   .mv-h1{font-size:clamp(3rem,12vw,4.4rem);}
   .mv-tagline{font-size:clamp(.9rem,3.5vw,1.1rem);}
   .mv-desc{font-size:.82rem;max-width:100%;}
-  .mv-cta-row,.mv-eyebrow,.mv-divider{justify-content:center;}
+  .mv-cta-row,.mv-eyebrow,.mv-divider,.mv-price{justify-content:center;}
   .mv-specs{margin:0 auto;}
   .mv-side,.mv-stamp{display:none;}
+  .mv-dna{max-width:100%;margin-top:18px;}
 }
 
 /* ══ SMALL  ≤ 480px ══ */
@@ -728,6 +1043,7 @@ const CSS = `
   .mv-btn-ghost{display:none;}
   .mv-scent{display:none;}
   .mv-scroll{display:none;}
+  .mv-dna{padding:10px 12px 8px;}
 }
 
 /* ══ TINY  ≤ 360px ══ */
@@ -739,6 +1055,7 @@ const CSS = `
   .mv-specs{grid-template-columns:1fr 1fr;}
   .mv-spec:last-child{display:none;}
   .mv-badge{font-size:.38rem;padding:5px 12px;}
+  .mv-dna{display:none;}
 }
 `;
 
@@ -746,9 +1063,10 @@ const CSS = `
    HERO
 ═══════════════════════════════════════════════════════════════════ */
 export default function Hero() {
-  const [cur,  setCur]  = useState(0);
-  const [dir,  setDir]  = useState(1);
-  const [hold, setHold] = useState(false);
+  const [cur,    setCur]    = useState(0);
+  const [dir,    setDir]    = useState(1);
+  const [hold,   setHold]   = useState(false);
+  const [modal,  setModal]  = useState(false);
 
   const timerRef = useRef(null);
   const stageRef = useRef(null);
@@ -774,7 +1092,9 @@ export default function Hero() {
     mouseY.set(((e.clientY-r.top) /r.height -.5)*2);
   };
   const resetMouse = ()=>{ mouseX.set(0); mouseY.set(0); };
+
   const toCollection = ()=>document.querySelector("#collection")?.scrollIntoView({behavior:"smooth"});
+  const toContact    = ()=>document.querySelector("#contact")?.scrollIntoView({behavior:"smooth"});
 
   const s   = SLIDES[cur];
   const Btl = BOTTLES[cur];
@@ -799,9 +1119,8 @@ export default function Hero() {
     }}>
       <style>{CSS}</style>
 
-      {/* ══ ATMOSPHERE — overflow:clip isolated so it never traps position:fixed elements ══ */}
+      {/* ══ ATMOSPHERE ══ */}
       <div style={{position:"absolute",inset:0,overflow:"clip",pointerEvents:"none",zIndex:0}}>
-
         <AnimatePresence mode="wait">
           <motion.div key={`bg${cur}`}
             initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}
@@ -812,7 +1131,6 @@ export default function Hero() {
             }}/>
         </AnimatePresence>
 
-        {/* Halftone grid */}
         <AnimatePresence mode="wait">
           <motion.div key={`dot${cur}`}
             initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}
@@ -828,7 +1146,6 @@ export default function Hero() {
           <Particles accent={s.accent}/>
         </div>
 
-        {/* Bottle-side glow */}
         <AnimatePresence mode="wait">
           <motion.div key={`orb1${cur}`}
             initial={{opacity:0,scale:.8}} animate={{opacity:1,scale:1}} exit={{opacity:0}}
@@ -841,7 +1158,6 @@ export default function Hero() {
             }}/>
         </AnimatePresence>
 
-        {/* Text-side glow */}
         <AnimatePresence mode="wait">
           <motion.div key={`orb2${cur}`}
             initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}
@@ -854,7 +1170,6 @@ export default function Hero() {
             }}/>
         </AnimatePresence>
 
-        {/* Watermark */}
         <AnimatePresence mode="wait">
           <motion.div key={`wm${cur}`}
             initial={{opacity:0,scale:.95}} animate={{opacity:1,scale:1}} exit={{opacity:0}}
@@ -869,7 +1184,6 @@ export default function Hero() {
           </motion.div>
         </AnimatePresence>
 
-        {/* Top & bottom rules */}
         {[{top:"13%"},{bottom:"13%"}].map((pos,i)=>(
           <AnimatePresence key={i} mode="wait">
             <motion.div key={`rl${i}-${cur}`}
@@ -886,9 +1200,9 @@ export default function Hero() {
         <Grain/>
       </div>
 
-      {/* ══════════════════════════════════════
+      {/* ══════════════════════════
           LAYOUT
-      ══════════════════════════════════════ */}
+      ══════════════════════════ */}
       <div className="mv-outer">
 
         {/* ─── LEFT: TEXT ─── */}
@@ -933,7 +1247,7 @@ export default function Hero() {
             </motion.div>
           </AnimatePresence>
 
-          {/* Heading — per-character stagger */}
+          {/* Heading */}
           <AnimatePresence mode="wait" custom={dir}>
             <motion.h1 key={`h${cur}`} className="mv-h1"
               custom={dir} variants={txtV} initial="enter" animate="center" exit="exit">
@@ -957,7 +1271,7 @@ export default function Hero() {
             </motion.p>
           </AnimatePresence>
 
-          {/* Ornamental divider */}
+          {/* Divider */}
           <div className="mv-divider">
             <motion.div className="mv-divider-line"
               style={{background:`linear-gradient(to right,${s.accent}55,${s.accent}00)`}}
@@ -984,18 +1298,38 @@ export default function Hero() {
             </motion.p>
           </AnimatePresence>
 
+          {/* Price */}
+          <AnimatePresence mode="wait">
+            <motion.div key={`price${cur}`} className="mv-price"
+              initial={{opacity:0,x:-12}} animate={{opacity:1,x:0}} exit={{opacity:0}}
+              transition={{duration:.44,delay:.1}}>
+              <span style={{
+                fontFamily:"'Cormorant Garamond',serif",
+                fontSize:"2.4rem",fontWeight:600,letterSpacing:"-.02em",
+                color:s.accent,lineHeight:1,
+              }}>{s.price}</span>
+              <span style={{
+                fontFamily:"'Cinzel',serif",fontSize:".38rem",
+                letterSpacing:".4em",color:`${s.accent}70`,
+                textTransform:"uppercase",paddingBottom:4,
+              }}>{s.ml}</span>
+            </motion.div>
+          </AnimatePresence>
+
           {/* CTA buttons */}
           <div className="mv-cta-row">
+            {/* Primary — opens order modal */}
             <motion.button className="mv-btn-primary"
               style={{
                 background:`linear-gradient(128deg,${s.cap} 0%,${s.accent} 48%,${s.liquid} 100%)`,
                 color:"#17080a",
                 boxShadow:`0 12px 46px ${s.accent}40,inset 0 1px 0 rgba(255,255,255,.24)`,
               }}
-              onClick={toCollection} whileTap={{scale:.97}}>
+              onClick={()=>setModal(true)} whileTap={{scale:.97}}>
               <span>{s.cta}</span>
             </motion.button>
 
+            {/* Ghost — scrolls to collection */}
             <motion.button className="mv-btn-ghost"
               style={{color:s.accent,border:`1px solid ${s.accent}42`}}
               onMouseEnter={e=>{
@@ -1006,6 +1340,7 @@ export default function Hero() {
                 e.currentTarget.style.borderColor=`${s.accent}42`;
                 e.currentTarget.style.boxShadow="none";
               }}
+              onClick={toCollection}
               whileTap={{scale:.97}}>
               View Collection
             </motion.button>
@@ -1028,15 +1363,15 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* ─── RIGHT: BOTTLE ─── */}
+        {/* ─── RIGHT: BOTTLE + DNA ─── */}
         <div className="mv-right">
 
+          {/* Stage */}
           <div ref={stageRef} className="mv-stage"
             onMouseMove={onMove}
             onMouseLeave={()=>{ resetMouse(); setHold(false); }}
             onMouseEnter={()=>setHold(true)}>
 
-            {/* Name stamp */}
             <AnimatePresence mode="wait">
               <motion.div key={`stmp${cur}`}
                 className="mv-stamp"
@@ -1047,7 +1382,6 @@ export default function Hero() {
               </motion.div>
             </AnimatePresence>
 
-            {/* Orbit rings */}
             {[
               {d:30,rev:false,i:"-10%",dash:"dashed",op:"1e"},
               {d:50,rev:true, i:"-26%",dash:"solid",  op:"10"},
@@ -1063,7 +1397,6 @@ export default function Hero() {
                 }}/>
             ))}
 
-            {/* Ambient glow pulse */}
             <motion.div
               animate={{scale:[1,1.2,1],opacity:[.16,.46,.16]}}
               transition={{duration:6,repeat:Infinity,ease:"easeInOut"}}
@@ -1074,7 +1407,6 @@ export default function Hero() {
                 transition:"background .8s ease",
               }}/>
 
-            {/* Bottle with float + parallax */}
             <AnimatePresence mode="wait" custom={dir}>
               <motion.div key={`btl${cur}`} custom={dir}
                 variants={btlV} initial="enter" animate="center" exit="exit"
@@ -1088,7 +1420,6 @@ export default function Hero() {
               </motion.div>
             </AnimatePresence>
 
-            {/* Ground shadow */}
             <motion.div
               animate={{scaleX:[1,1.1,1],opacity:[.13,.26,.13]}}
               transition={{duration:7.5,repeat:Infinity,ease:"easeInOut"}}
@@ -1101,7 +1432,7 @@ export default function Hero() {
               }}/>
           </div>
 
-          {/* Prev / Scent pill / Next */}
+          {/* Nav row */}
           <div className="mv-nav-row"
             onMouseEnter={()=>setHold(true)}
             onMouseLeave={()=>setHold(false)}>
@@ -1157,6 +1488,18 @@ export default function Hero() {
               </svg>
             </motion.button>
           </div>
+
+          {/* ✦ SCENT DNA VISUALIZER */}
+          <AnimatePresence mode="wait">
+            <motion.div key={`dna${cur}`}
+              className="mv-dna"
+              initial={{opacity:0,y:14}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-8}}
+              transition={{duration:.55,ease:[.16,1,.3,1]}}
+              onMouseEnter={()=>setHold(true)}
+              onMouseLeave={()=>setHold(false)}>
+              <ScentDNA slide={s}/>
+            </motion.div>
+          </AnimatePresence>
         </div>
 
         {/* ─── BOTTOM BAR ─── */}
@@ -1215,13 +1558,18 @@ export default function Hero() {
         ))}
       </div>
 
-      {/* Scroll indicator */}
-      <div className="mv-scroll" onClick={toCollection}>
+      {/* Scroll indicator → scrolls to collection */}
+      <div className="mv-scroll" onClick={toCollection} style={{cursor:"pointer"}}>
         <span className="mv-scroll-lbl" style={{color:s.accent}}>Discover</span>
         <div className="mv-scroll-mouse" style={{border:`1px solid ${s.accent}44`}}>
           <div className="mv-scroll-pip" style={{background:s.accent}}/>
         </div>
       </div>
+
+      {/* Order Modal */}
+      <AnimatePresence>
+        {modal && <OrderModal slide={s} onClose={()=>setModal(false)}/>}
+      </AnimatePresence>
 
     </section>
   );
