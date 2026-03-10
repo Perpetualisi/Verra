@@ -21,12 +21,12 @@
 }
 
 html {
-  overflow-x: visible;  /* Fixed: prevent clipping of fixed elements on mobile */
+  overflow-x: clip;   /* ✅ safe — NOT transferred to viewport */
   scroll-behavior: smooth;
 }
 
 body {
-  overflow-x: visible;  /* Fixed: prevent clipping of fixed elements on mobile */
+  overflow-x: clip;   /* ✅ safe — NOT transferred to viewport */
   min-height: 100svh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

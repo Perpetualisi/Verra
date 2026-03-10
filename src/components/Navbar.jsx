@@ -392,7 +392,7 @@ export default function Navbar() {
             <button
               onClick={() => setMenuOpen(v => !v)}
               aria-label={menuOpen ? "Close menu" : "Open menu"}
-              style={{ background: "rgba(0,0,0,0.1)", border: "none", borderRadius: "50%", cursor: "pointer", width: 36, height: 36, padding: 0, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              style={{ background: "none", border: "none", cursor: "pointer", width: 36, height: 36, padding: 0, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
               <Hamburger open={menuOpen}/>
             </button>
           )}
