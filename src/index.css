@@ -1,33 +1,53 @@
 /* ─────────────────────────────────────────────────────
-   GLOBAL RESET
-   
-   CRITICAL: Do NOT use overflow-x: hidden on html or body.
-   When set on these two elements, browsers transfer the
-   overflow to the viewport scroll container, which clips
-   ALL position:fixed elements (including the navbar/hamburger)
-   on the right edge of narrow mobile screens.
-   
-   overflow-x: clip achieves the same visual result (no
-   horizontal scrollbar) WITHOUT being transferred to the
-   viewport, so fixed elements render correctly.
+   index.css - PURE CSS ONLY
 ───────────────────────────────────────────────────── */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+@layer base {
+  :root {
+    --gold-accent: #c9a84c;
+    --silk-white: #fdfdfd;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    overflow-x: clip; /* ✅ Safe mobile fix */
+    scroll-behavior: smooth;
+  }
+
+  body {
+    overflow-x: clip;
+    min-height: 100svh;
+    background-color: var(--silk-white);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-size-adjust: none;
+  }
+
+  svg {
+    display: block;
+    shape-rendering: geometricPrecision;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+  }
 }
 
-html {
-  overflow-x: clip;   /* ✅ safe — NOT transferred to viewport */
-  scroll-behavior: smooth;
-}
+@layer utilities {
+  .bottle-stage {
+    touch-action: none;
+  }
 
-body {
-  overflow-x: clip;   /* ✅ safe — NOT transferred to viewport */
-  min-height: 100svh;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Custom Selection Color */
+  ::selection {
+    background-color: var(--gold-accent);
+    color: white;
+  }
 }
