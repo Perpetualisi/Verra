@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
 
@@ -112,6 +112,7 @@ function Wordmark({ rotY, rotX }) {
           PARIS
         </text>
       </svg>
+      {/* shine sweep */}
       <motion.div style={{
         position: "absolute", top: 0, left: 0, width: "42%", height: "100%",
         background: "linear-gradient(108deg, transparent 28%, rgba(255,248,200,0.5) 50%, transparent 72%)",
@@ -159,14 +160,14 @@ function Drawer({ open, onClose }) {
     <AnimatePresence>
       {open && (
         <>
+          {/* backdrop */}
           <motion.div key="ovl"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             onClick={onClose}
-            style={{
-              position: "fixed", inset: 0, zIndex: 1998,
-              background: "rgba(8,4,0,0.5)", backdropFilter: "blur(4px)",
-            }}/>
+            style={{ position: "fixed", inset: 0, zIndex: 1998, background: "rgba(8,4,0,0.5)", backdropFilter: "blur(4px)" }}/>
+
+          {/* panel */}
           <motion.aside key="panel"
             initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
             transition={{ duration: 0.48, ease: [0.16, 1, 0.3, 1] }}
@@ -178,7 +179,11 @@ function Drawer({ open, onClose }) {
               borderLeft: `1px solid rgba(212,175,55,0.18)`,
               display: "flex", flexDirection: "column", overflowY: "auto",
             }}>
+
+            {/* gold top stripe */}
             <div style={{ height: 3, flexShrink: 0, background: `linear-gradient(to right, ${GOLD}, ${GOLD_LIGHT}, transparent)` }}/>
+
+            {/* header row */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 24px 0", flexShrink: 0 }}>
               <span style={{ fontFamily: "'Cinzel',serif", fontSize: "0.44rem", letterSpacing: "0.44em", color: `${GOLD}aa`, textTransform: "uppercase" }}>
                 Maison Verra
@@ -192,7 +197,11 @@ function Drawer({ open, onClose }) {
                 </svg>
               </motion.button>
             </div>
+
+            {/* divider */}
             <div style={{ margin: "16px 24px 0", height: 1, background: "rgba(212,175,55,0.1)" }}/>
+
+            {/* links */}
             <nav style={{ flex: 1 }}>
               <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
                 {LINKS.map((link, i) => (
@@ -200,7 +209,15 @@ function Drawer({ open, onClose }) {
                     initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}
                     transition={{ delay: 0.04 + i * 0.055, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
                     <a href={`#${link.toLowerCase()}`} onClick={onClose}
-                      style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "15px 24px", borderBottom: "1px solid rgba(212,175,55,0.08)", fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(1.4rem,5.5vw,1.75rem)", fontWeight: 300, color: INK, textDecoration: "none", transition: "color 0.2s, padding-left 0.24s, background 0.2s" }}
+                      style={{
+                        display: "flex", alignItems: "center", justifyContent: "space-between",
+                        padding: "15px 24px",
+                        borderBottom: "1px solid rgba(212,175,55,0.08)",
+                        fontFamily: "'Cormorant Garamond',serif",
+                        fontSize: "clamp(1.4rem,5.5vw,1.75rem)",
+                        fontWeight: 300, color: INK, textDecoration: "none",
+                        transition: "color 0.2s, padding-left 0.24s, background 0.2s",
+                      }}
                       onMouseEnter={e => { e.currentTarget.style.color = GOLD; e.currentTarget.style.paddingLeft = "32px"; e.currentTarget.style.background = "rgba(212,175,55,0.04)"; }}
                       onMouseLeave={e => { e.currentTarget.style.color = INK;  e.currentTarget.style.paddingLeft = "24px"; e.currentTarget.style.background = "transparent"; }}>
                       <span>{link}</span>
@@ -212,11 +229,17 @@ function Drawer({ open, onClose }) {
                 ))}
               </ul>
             </nav>
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ delay: 0.32, duration: 0.4 }} style={{ padding: "18px 24px 28px", flexShrink: 0 }}>
+
+            {/* social row */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+              transition={{ delay: 0.32, duration: 0.4 }}
+              style={{ padding: "18px 24px 28px", flexShrink: 0 }}>
               <div style={{ height: 1, background: "rgba(212,175,55,0.1)", marginBottom: 16 }}/>
               <div style={{ display: "flex", gap: 20, justifyContent: "center" }}>
                 {["IG", "TW", "FB", "PT"].map(s => (
-                  <span key={s} style={{ fontFamily: "'Cinzel',serif", fontSize: "0.44rem", letterSpacing: "0.24em", color: "rgba(120,80,10,0.36)", cursor: "pointer", transition: "color 0.18s" }}
+                  <span key={s}
+                    style={{ fontFamily: "'Cinzel',serif", fontSize: "0.44rem", letterSpacing: "0.24em", color: "rgba(120,80,10,0.36)", cursor: "pointer", transition: "color 0.18s" }}
                     onMouseEnter={e => e.currentTarget.style.color = GOLD}
                     onMouseLeave={e => e.currentTarget.style.color = "rgba(120,80,10,0.36)"}>
                     {s}
@@ -235,47 +258,15 @@ function Drawer({ open, onClose }) {
    NAVBAR — main export
 ───────────────────────────────────── */
 export default function Navbar() {
-  const [scrolled,  setScrolled]  = useState(false);
-  const [progress,  setProgress]  = useState(0);
-  const [menuOpen,  setMenuOpen]  = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  // useLayoutEffect fires synchronously before the browser paints
+  // so width is correct on the very first render — no flash, no missing hamburger
   const [width, setWidth] = useState(() =>
     typeof window !== "undefined" ? window.innerWidth : 1200
   );
-
-  const savedHtmlOverflow = useRef("");
-  const savedBodyOverflow = useRef("");
-
-  /*
-   * ✅ ROOT CAUSE FIX — body { overflow-x: hidden } clips position:fixed
-   *
-   * DevTools shows:  body { overflow-x: hidden }  (from global CSS)
-   *
-   * The CSS spec has a special rule: if overflow is set on <html> or <body>
-   * and the other one is "visible", the overflow value is TRANSFERRED to the
-   * viewport scroll container. This means overflow:hidden on <body> clips
-   * the VIEWPORT — including ALL position:fixed elements, even those rendered
-   * via createPortal. The hamburger button at the right edge of the 432px
-   * viewport is inside the 432px viewport width, but the horizontal scroll
-   * container is clipped, so anything near the right edge gets cut off.
-   *
-   * Fix: imperatively set overflowX to "visible" on both <html> and <body>
-   * on mount, and restore on unmount. This removes the viewport clipping
-   * without breaking vertical scroll. To prevent horizontal scroll bleed
-   * from page content, the Hero component uses overflow:clip on its
-   * decorative background wrapper (clip is NOT transferred to the viewport).
-   */
-  useLayoutEffect(() => {
-    const html = document.documentElement;
-    const body = document.body;
-    savedHtmlOverflow.current = html.style.overflowX;
-    savedBodyOverflow.current = body.style.overflowX;
-    html.style.overflowX = "visible";
-    body.style.overflowX = "visible";
-    return () => {
-      html.style.overflowX = savedHtmlOverflow.current;
-      body.style.overflowX = savedBodyOverflow.current;
-    };
-  }, []);
 
   useLayoutEffect(() => {
     const update = () => setWidth(window.innerWidth);
@@ -297,16 +288,15 @@ export default function Navbar() {
 
   const isMobile = width <= 768;
   const isTablet = width <= 1100;
-  const pad =
-    width <= 360  ? "14px" :
-    width <= 768  ? "20px" :
-    width <= 1100 ? "32px" : "48px";
+  const pad      = width <= 360 ? "14px" : width <= 768 ? "20px" : width <= 1100 ? "32px" : "48px";
 
+  // Logo: gem + wordmark (wordmark hidden on ≤360)
   const LogoMemo = () => {
     const mx   = useMotionValue(0);
     const my   = useMotionValue(0);
     const rotY = useSpring(useTransform(mx, [-1, 1], [-18, 18]), { stiffness: 200, damping: 24 });
     const rotX = useSpring(useTransform(my, [-1, 1], [12, -12]), { stiffness: 200, damping: 24 });
+
     return (
       <a href="#home"
         onMouseMove={e => {
@@ -315,7 +305,8 @@ export default function Navbar() {
           my.set(((e.clientY - r.top)  / r.height - 0.5) * 2);
         }}
         onMouseLeave={() => { mx.set(0); my.set(0); }}
-        style={{ display: "flex", alignItems: "center", gap: 9, textDecoration: "none", cursor: "pointer", perspective: 700, userSelect: "none", flexShrink: 0 }}>
+        style={{ display: "flex", alignItems: "center", gap: 9, textDecoration: "none", cursor: "pointer", perspective: 700, userSelect: "none", flexShrink: 0 }}
+      >
         <GemMark rotY={rotY} rotX={rotX}/>
         {width > 360 && <Wordmark rotY={rotY} rotX={rotX}/>}
       </a>
@@ -324,6 +315,7 @@ export default function Navbar() {
 
   return createPortal(
     <>
+      {/* ══════ NAV BAR ══════ */}
       <nav style={{
         position:   "fixed",
         top: 0, left: 0, right: 0,
@@ -341,6 +333,7 @@ export default function Navbar() {
         boxShadow:    scrolled ? "0 1px 0 rgba(212,175,55,0.18), 0 6px 32px rgba(160,110,20,0.06)" : "none",
         borderBottom: scrolled ? "1px solid rgba(212,175,55,0.14)" : "1px solid transparent",
         transition:   "height 0.38s ease, background 0.45s ease, box-shadow 0.45s ease, border-color 0.45s ease",
+        // IMPORTANT: no overflow:hidden so nothing clips
       }}>
 
         {/* scroll progress bar */}
@@ -353,61 +346,116 @@ export default function Navbar() {
           transition: "width 0.1s linear",
         }}/>
 
+        {/* ── Logo ── */}
         <LogoMemo/>
 
+        {/* ── Desktop nav links (hidden on mobile) ── */}
         {!isMobile && (
           <ul style={{ display: "flex", gap: isTablet ? 20 : 36, listStyle: "none", padding: 0, margin: 0, alignItems: "center" }}>
-            {LINKS.map((link) => (
+            {LINKS.map((link, i) => (
               <li key={link} style={{ listStyle: "none" }}>
                 <a href={`#${link.toLowerCase()}`}
-                  style={{ position: "relative", display: "inline-block", fontFamily: "'Cinzel',serif", fontSize: "0.57rem", letterSpacing: "0.26em", textTransform: "uppercase", color: "rgba(26,14,0,0.68)", textDecoration: "none", paddingBottom: 4, transition: "color 0.22s" }}
-                  onMouseEnter={e => { e.currentTarget.style.color = GOLD; const b = e.currentTarget.querySelector("[data-bar]"); if (b) b.style.width = "100%"; }}
-                  onMouseLeave={e => { e.currentTarget.style.color = "rgba(26,14,0,0.68)"; const b = e.currentTarget.querySelector("[data-bar]"); if (b) b.style.width = "0%"; }}>
+                  style={{
+                    position: "relative", display: "inline-block",
+                    fontFamily: "'Cinzel',serif",
+                    fontSize: "0.57rem", letterSpacing: "0.26em", textTransform: "uppercase",
+                    color: "rgba(26,14,0,0.68)", textDecoration: "none", paddingBottom: 4,
+                    transition: "color 0.22s",
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.color = GOLD;
+                    const b = e.currentTarget.querySelector("[data-bar]");
+                    if (b) b.style.width = "100%";
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.color = "rgba(26,14,0,0.68)";
+                    const b = e.currentTarget.querySelector("[data-bar]");
+                    if (b) b.style.width = "0%";
+                  }}>
                   {link}
-                  <span data-bar style={{ position: "absolute", bottom: 0, left: 0, height: 1, width: "0%", background: `linear-gradient(to right, ${GOLD}, ${GOLD_LIGHT})`, borderRadius: 1, transition: "width 0.32s cubic-bezier(0.16,1,0.3,1)", pointerEvents: "none" }}/>
+                  <span data-bar style={{
+                    position: "absolute", bottom: 0, left: 0,
+                    height: 1, width: "0%",
+                    background: `linear-gradient(to right, ${GOLD}, ${GOLD_LIGHT})`,
+                    borderRadius: 1,
+                    transition: "width 0.32s cubic-bezier(0.16,1,0.3,1)",
+                    pointerEvents: "none",
+                  }}/>
                 </a>
               </li>
             ))}
           </ul>
         )}
 
+        {/* ── Right cluster ── */}
         <div style={{ display: "flex", alignItems: "center", gap: 12, flexShrink: 0 }}>
+
+          {/* Cart link — desktop/tablet only */}
           {!isMobile && (
             <a href="#collection"
               style={{ color: "rgba(26,14,0,0.55)", display: "flex", alignItems: "center", textDecoration: "none", padding: "4px", transition: "color 0.22s" }}
               onMouseEnter={e => e.currentTarget.style.color = GOLD}
               onMouseLeave={e => e.currentTarget.style.color = "rgba(26,14,0,0.55)"}
               aria-label="View collection">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
                 <line x1="3" y1="6" x2="21" y2="6"/>
                 <path d="M16 10a4 4 0 01-8 0"/>
               </svg>
             </a>
           )}
+
+          {/* Thin divider — wide desktop only */}
           {!isTablet && (
             <div style={{ width: 1, height: 20, background: "rgba(212,175,55,0.25)", flexShrink: 0 }}/>
           )}
+
+          {/* Hamburger — MOBILE ONLY — plain button, always in flex row */}
           {isMobile && (
             <button
               onClick={() => setMenuOpen(v => !v)}
               aria-label={menuOpen ? "Close menu" : "Open menu"}
-              style={{ background: "none", border: "none", cursor: "pointer", width: 36, height: 36, padding: 0, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                width: 36,
+                height: 36,
+                padding: 0,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+              }}>
               <Hamburger open={menuOpen}/>
             </button>
           )}
         </div>
       </nav>
 
+      {/* ══════ MOBILE DRAWER ══════ */}
       <Drawer open={menuOpen} onClose={() => setMenuOpen(false)}/>
 
+      {/* ══════ SIDE DOTS — desktop only ══════ */}
       {!isMobile && (
-        <div style={{ position: "fixed", right: 18, top: "50%", transform: "translateY(-50%)", display: "flex", flexDirection: "column", alignItems: "center", gap: 10, zIndex: 800 }}>
+        <div style={{
+          position: "fixed", right: 18, top: "50%", transform: "translateY(-50%)",
+          display: "flex", flexDirection: "column", alignItems: "center", gap: 10,
+          zIndex: 800,
+        }}>
           {LINKS.map((link, i) => (
             <motion.a key={link} href={`#${link.toLowerCase()}`} title={link}
-              initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, x: 8 }}
+              animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.6 + i * 0.07, duration: 0.4 }}
-              style={{ width: 5, height: 5, borderRadius: "50%", background: "rgba(212,175,55,0.22)", border: "1px solid rgba(212,175,55,0.4)", display: "block", textDecoration: "none", transition: "all 0.26s ease" }}
+              style={{
+                width: 5, height: 5, borderRadius: "50%",
+                background: "rgba(212,175,55,0.22)",
+                border: "1px solid rgba(212,175,55,0.4)",
+                display: "block", textDecoration: "none",
+                transition: "all 0.26s ease",
+              }}
               whileHover={{ scale: 1.6, backgroundColor: GOLD, borderColor: GOLD, boxShadow: `0 0 9px rgba(212,175,55,0.5)` }}/>
           ))}
         </div>
